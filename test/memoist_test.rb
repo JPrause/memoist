@@ -111,6 +111,10 @@ class MemoistTest < Test::Unit::TestCase
       @count += 1
     end
     memoize :counter
+
+    500.times do |i|
+      define_method("method_#{i}") { }
+    end
   end
 
   def setup
@@ -166,6 +170,10 @@ class MemoistTest < Test::Unit::TestCase
     assert @calculator.instance_variable_get(:@_memoized_counter).empty?
 
     assert_equal 2, @calculator.counter
+  end
+
+  def test_flush_cache_with_many_methods
+    @calculator.flush_cache(*((1..100).to_a))
   end
 
   def test_unmemoize_all
